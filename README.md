@@ -1,6 +1,7 @@
 # -fastAPI-backend
 
 ```
-sudo docker build -t app-name .
-docker run -p 8000:8000 app-name
+docker build -t app .
+docker run -p 8000:8000 app
+Docs: http://0.0.0.0:8000/docs
 ```
