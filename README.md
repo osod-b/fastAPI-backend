@@ -31,6 +31,10 @@ WORKDIR ./src
 CMD ["/src/docker-run.sh"]
 ```
 ### Prerequisites
+```
+Python
+Docker
+```
 
 ## Project Structure
 
