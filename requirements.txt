@@ -1,0 +1,15 @@
+fastapi[standard]
+uvicorn
+sqlalchemy
+sqlmodel
+pydantic
+passlib
+pandas
+pyjwt
+python-dotenv
+pytest
+bcrypt==4.0.1
+redis
+mailtrap
+cryptography
+aiosqlite

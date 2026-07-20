@@ -1,0 +1,17 @@
+#!/bin/bash
+
+DOCK_CONTAINER=$(sudo docker ps --filter "publish=8000" --format "{{.ID}}")
+
+echo "Stopping Container $DOCK_CONTAINER"
+
+sudo docker stop "$DOCK_CONTAINER"
+
+echo "Rebuilding docker image"
+
+sudo docker build -t myapp .
+
+echo "Running docker image"
+
+sudo docker run -p 8000:8000 myapp
+
+
