@@ -10,9 +10,9 @@ class UserModel(Base):
     __tablename__ = 'users'
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    username = Column(String(14), nullable = False, unique=True)
+    username = Column(String(20), nullable = False, unique=True)
     email = Column(String(12), nullable = False, unique=True)
-    password = Column(String(32), nullable = False)
+    password = Column(String(64), nullable = False)
     role = Column(String(12), default='buyer', nullable = False)
     date_created = Column(String, default=datetime.now(timezone.utc).strftime("%Y-%m-%d"), nullable = False)
     active = Column(Boolean, default=True)

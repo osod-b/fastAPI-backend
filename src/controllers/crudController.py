@@ -1,16 +1,15 @@
 from fastapi import APIRouter, HTTPException, status, Depends, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from services.crudService import ClientService
 from utils.Repositories import ClientRepository
-from schemas.client import ClientSchema
-from validators.clients import UUIDVal
+from schemas.client import ClientSchema, EditInput
 from services.jwtService import _decode_jwt, _tokens_presence
-from db.schema import get_db, get_cache_db
+from db.schema import get_db
 from utils.crudHelpers import _get_role
+from validators.clients import UUIDVal
 
-#protection from duplicate customer requests - limit on 3 - redis will help
 
 crud = APIRouter()
 
@@ -22,18 +21,9 @@ async def get_client_repo(
 @crud.post('/crud/add_client', status_code=status.HTTP_200_OK)
 async def add(
     post: ClientSchema,
-    request: Request,
     service: ClientService = Depends(),
     repository: ClientRepository = Depends(get_client_repo),
 ):
-    a_token, r_token = request.cookies.get('access_token'), request.cookies.get('refresh_token')
-
-    if not _tokens_presence(a_token, r_token):
-        raise HTTPException(
-                status_code=403,
-                detail='LogIn First'
-        )
-
     result = await service.add(post, repository)
     response = JSONResponse(content=result)
 
@@ -41,7 +31,7 @@ async def add(
 
 @crud.post('/crud/edit_client', status_code=status.HTTP_200_OK)
 async def edit_client(
-    post: UUIDVal,
+    post: EditInput,
     request: Request,
     service: ClientService = Depends(),
     repository: ClientRepository = Depends(get_client_repo),
@@ -88,20 +78,22 @@ async def delete_client(
         raise HTTPException(
                 status_code=403,
                 detail="No RBAC Rules"
-        )
+        ) 
 
     result = await service.delete(post, repository)
     response = JSONResponse(content=result)
  
     return response
 
-@crud.get('/crud/find/', status_code=status.HTTP_200_OK)
+@crud.get('/clients/find/{uuid}', status_code=status.HTTP_200_OK)
 async def find_client(
-    post: UUIDVal,
-    request: Request,
-    service: ClientService = Depends(),
-    repository: ClientRepository = Depends(get_client_repo),
+     request: Request,
+     uuid: str = '',
+     service: ClientService = Depends(), 
+     repository: ClientRepository = Depends(get_client_repo),
 ):
+    param = UUIDVal(value=uuid)
+
     a_token, r_token = request.cookies.get("access_token"), request.cookies.get("refresh_token")
 
     if not _tokens_presence(a_token, r_token):
@@ -120,7 +112,6 @@ async def find_client(
                 detail="No RBAC Rules"
         )
 
-    result = await service.get_single(post, repository)
+    result = await service.get_single(param, repository)
     response = JSONResponse(content=result)
- 
     return response

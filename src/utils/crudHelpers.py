@@ -14,6 +14,9 @@ def _get_datetime_now() -> datetime:
 def unwrap(data: dict):
     res = dict()
     for key, val in data.items():
-        res[key] = val['value']
+        if 'value' in val:
+            res[key] = val['value']
+        else:
+            res[key] = val
     
     return res

@@ -244,7 +244,7 @@ class ClientRepository:
                 detail="Not Valid UUID")
         try:
             result = await self.db.execute(
-                select(ClientModel).where(ClientModel.uuid == uuid)
+                select(ClientModel).where(ClientModel.id == uuid)
             )
         except OperationalError:
             raise HTTPException(503, detail="DB is down")

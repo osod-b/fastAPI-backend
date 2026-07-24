@@ -17,21 +17,17 @@ class Settings(BaseSettings):
     ALLOWED_ORIGINS: str = Field(alias="ALLOW_ORIGINS")
     DATABASE_URL: str = Field(alias="DB_URL")
     CACHE_DB_URL: str = Field(alias="CACHE_DB_URL")
-    DB_PWD: str = Field(alias="DB_PASSWORD")
     JWT_SECRET_KEY: str = Field(alias="JWT_SECRET_KEY")
     TOKEN_EXPIRES_MINUTES: int = Field(alias="TOKEN_EXPIRES_MINUTES")
     TOKEN_EXPIRES_DAYS: int = Field(alias="TOKEN_EXPIRES_DAYS")
     HASHING_ALGORITHM: str = Field(alias="HASHING_ALGORITHM")
     SSH_KEY: str = Field(alias="SSH_KEY")
     HMAC_MESSAGE: str = Field(alias="HMAC_MESSAGE")
-    ALLOWED_FILE_FORMATS: str = Field(alias="ALLOWED_FILE_FORMATS")
-    ALLOWED_TABLE_NAMES: str = Field(alias="TABLES")
-    ALLOWED_MEDIAS: str = Field(alias="ALLOWED_MEDIA")
     FERNET_KEY: str = Field(alias="FERNET")
     STORAGE_PATH: str = Field(alias="STORAGE_PATH")
 
     @classmethod
-    @field_validator("ALLOWED_ORIGINS", "ALLOWED_FILE_FORMATS", "ALLOWED_TABLE_NAMES", "ALLOWED_MEDIAS", mode='before')
+    @field_validator("ALLOWED_ORIGINS", mode='before')
     def validate_fields(cls, v: str) -> List[str]:
         try:
             result = v.split(',')

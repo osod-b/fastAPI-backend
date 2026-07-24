@@ -1,5 +1,10 @@
 from fastapi import FastAPI
-from app.middle import add_middleware, add_ratelimiter_middleware, add_signature_middlware, add_ip_catcher_middleware
+from app.middle import (
+    add_middleware,
+    add_ratelimiter_middleware, 
+    add_signature_middlware,
+    add_sessionid_middleware, 
+    )
 
 from controllers.crudController import crud
 from controllers.filesController import files
@@ -19,13 +24,14 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title='Backend Application',
               lifespan=lifespan,
-              description='Multifunctional backend API for CRUD operations, authentication, and database management.'
+              description='Multifunctional backend API for CRUD operations,' \
+                          ' authentication, and database management.'
             )
 
 add_middleware(app)
 add_ratelimiter_middleware(app)
 add_signature_middlware(app)
-add_ip_catcher_middleware(app)
+add_signature_middlware(app)
 
 app.include_router(login)
 app.include_router(sign)

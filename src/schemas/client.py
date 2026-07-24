@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from validators.clients import NameValidator, EmailValidator, PhoneNumberValidator, MessageValidator
+from validators.clients import NameValidator, EmailValidator, PhoneNumberValidator, MessageValidator, UUIDVal
 from uuid import UUID
 
 class ClientSchema(BaseModel):
@@ -14,6 +14,14 @@ class ClientSchema(BaseModel):
     model_config = {
         "from_attributes": True 
     }
+
+#dict of field:value and for loop goes over them and along makes
+# validation of allowed field names: message, name, pnum along with values validation
+
+class EditInput(BaseModel):
+    field: str
+    value: str
+    uuid: UUIDVal
 
 class UpdateInput(BaseModel):
     input: str | UUID

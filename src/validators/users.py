@@ -8,7 +8,7 @@ from pydantic import BaseModel, constr, field_validator
 #allow in password only latin letters ascii, digits, some of special symbols
 
 class UsernameValidator(BaseModel):
-    value: constr(min_length=5, max_length=14)
+    value: constr(min_length=4, max_length=20)
 
     @field_validator('value')
     def validate_username(cls, v):
@@ -17,7 +17,7 @@ class UsernameValidator(BaseModel):
         return v
 
 class EmailValidator(BaseModel):
-    value: constr(min_length=1, max_length=256)
+    value: constr(min_length=1, max_length=254)
 
     @field_validator('value')
     def validate_email(cls, v):
@@ -45,7 +45,7 @@ class RoleValidator(BaseModel):
 #allow in password only latin letters ascii, digits, some of special symbols
 
 class PasswordValidator(BaseModel):
-    value: constr(min_length=12, max_length=128, pattern=r'^[a-zA-Z0-9!@#$%^&*()_+=\-\{\}\[\]:;"\'<>,.?/\\|~]+$')
+    value: constr(min_length=12, max_length=64, pattern=r'^[a-zA-Z0-9!@#$%^&*()_+=\-\{\}\[\]:;"\'<>,.?/\\|~]+$')
 
     NUMBERS: ClassVar[int] = 1
     SPECIAL: ClassVar[int] = 1

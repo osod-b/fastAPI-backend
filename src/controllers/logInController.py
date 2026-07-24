@@ -8,7 +8,7 @@ from services.authService import UserLoginService
 from schemas.user import UserLogin
 from utils.authHelpers import  _get_ip_address
 from services.jwtService import _tokens_presence
-from db.schema import get_db, get_cache_db
+from db.schema import get_db
 
 
 login = APIRouter()

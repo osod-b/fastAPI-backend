@@ -13,3 +13,4 @@ redis
 mailtrap
 cryptography
 aiosqlite
+datafaker

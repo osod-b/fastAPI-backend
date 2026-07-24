@@ -27,7 +27,7 @@ from utils.authHelpers import (
 )
 
 # CLEANER CODE
-# style helpers in the same consistent wa
+# style helpers in the same consistent way
 
 key = setting.FERNET_KEY
 cipher = Fernet(key)

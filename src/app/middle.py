@@ -5,9 +5,9 @@ from core.config import setting
 
 from app.middleware.rate_limiter import RateLimiterStore
 from app.middleware.hmac_token import TokenController
+from app.middleware.session import SessionStorage, SessionToken
+
 import time
-
-
 
 def add_middleware(app):
     app.add_middleware(
@@ -19,16 +19,39 @@ def add_middleware(app):
 )
 
 limiter = RateLimiterStore(max_tokens=10, refill_rate=2, interval=1.0)
+
 controller = TokenController()
 
-def add_ip_catcher_middleware(app):
-    @app.middleware("http")
-    async def ip_catcher_middleware(request: Request, call_next):
-        client_ip = request.client.host
+session_store = SessionStorage()
 
-        request.scope["headers"].append((b"x-user-ip", bytes(client_ip, 'utf-8')))
-        
+SESSION_COOKIE_NAME = "session_id"
+SESSION_TTL_SECONDS = 1800 
+
+
+def add_sessionid_middleware(app):
+    @app.middleware("http")
+    async def session_middleware(request: Request, call_next):
+        session_id = request.cookies.get(SESSION_COOKIE_NAME)
+        is_new_session = False
+ 
+        if session_id and session_store.touch(session_id, SESSION_TTL_SECONDS):
+            pass
+        else:
+            session_id = session_store.generate(ttl_seconds=SESSION_TTL_SECONDS)
+            is_new_session = True
+ 
+        request.state.session_id = session_id
         response = await call_next(request)
+ 
+        if is_new_session:
+            response.set_cookie(
+                key=SESSION_COOKIE_NAME,
+                value=session_id,
+                httponly=True,
+                samesite="lax",
+                secure=True,   # only reaches the client over HTTPS -- see note below
+                max_age=SESSION_TTL_SECONDS,
+            )
         return response
 
 
@@ -39,12 +62,11 @@ def add_signature_middlware(app):
         received_signature = request.headers.get("x-signature")
 
         if not received_signature:
-            counterfited_signature = controller.create_signature()
-            request.scope["headers"].append((b"x-signature", bytes(counterfited_signature, "utf-8")))
+            received_signature = controller.create_signature()
+            request.scope["headers"].append((b"x-signature", bytes(received_signature, "utf-8")))
 
-        if not controller.compare_signatures(counterfited_signature):
-            return JSONResponse(status_code=403, 
-                                content={"detail": "Signature invalid"})
+        if not controller.compare_signatures(received_signature):
+            return JSONResponse(status_code=403, content={"detail": "Signature invalid"})
         
         response = await call_next(request)
         return response

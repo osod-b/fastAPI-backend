@@ -2,39 +2,23 @@ from fastapi import APIRouter, Depends, Request, status, HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from fastapi.security.http import HTTPAuthorizationCredentials, HTTPBearer
+
 from validators.users import VerificationalCode, EmailValidator, PasswordValidator
 from schemas.user import UserRegistration
 from utils.Repositories import UserRepository
 from services.authService import UserSignupService
 from utils.authHelpers import  _get_ip_address
 from services.jwtService import _tokens_presence
-from db.schema import get_db, get_cache_db
+from db.schema import get_db
 
 
 sign = APIRouter()
 
+get_bearer_token = HTTPBearer(auto_error=False)
+
 def get_user_repo(db: AsyncSession = Depends(get_db)) -> UserRepository:
     return UserRepository(db)
-
-#implement cache database (but I'm still not sure.)
-
-#separate layers, build basic structure for endpoints, completly analyze and finish auth endpoints. Re read all and create understanding of system.
-
-#TODO_: 
-#account lock up after 3 bad attempts but lock out after page refresh
-#after some certain verification's as log in autofill fields - remember me property (if remember me - create longer session or longer jwt expirity??)
-#abstract email validation before registration
-#account deactivation after 15 days logged out
-
-#Bearer token, some issues with BucketRateLimiter, also analyze it.
-
-#save somewhat like key in this relation, next step will be verifier endpoint where user will send his code
-#this second endpoint takes this code insterted and then varifies it with the code in endpoint
-
-#emails out, token out
-#exclude .env + cahces
-
-#session id's?
 
 @sign.post('/auth/register', status_code=status.HTTP_202_ACCEPTED)
 async def register_user(
