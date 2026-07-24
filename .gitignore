@@ -7,3 +7,4 @@ storage/exports
 storage/files
 storage/imports
 TODO.txt
+__pycache__
