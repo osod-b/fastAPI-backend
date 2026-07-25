@@ -3,9 +3,8 @@ src/.pytest_cache/
 .env
 .venv
 code.py
-storage/exports
-storage/files
-storage/imports
+storage/*
+!storage/.gitkeep
 TODO.txt
 __pycache__
 logs
