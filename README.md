@@ -1,7 +1,5 @@
 # -fastAPI-backend
-[GitHub Pages]() \ 
-Backend API with JWT tokens, MFA, CRUD, sort of architecture with layer separation.
-
+Backend API with JWT tokens, MFA, CRUD, layer separation.
 
 ## Local deployment
 ```
@@ -10,7 +8,8 @@ docker run -p 8000:8000 app
 
 Docs: http://localhost:8000/docs
 ```
-## Docker Image
+
+## Docker Image Configuration
 ```
 FROM python:3.12-slim
 WORKDIR /
@@ -30,28 +29,86 @@ RUN chmod +x /src/docker-run.sh
 WORKDIR ./src
 CMD ["/src/docker-run.sh"]
 ```
-### Prerequisites
-```
-Python
-Docker
-```
+
+## Prerequisites
+- Python
+- Docker
+- Redis
+- Git
+  
+## Requirements.txt
+- FastAPI
+- Uvicorn
+- SqlALchemy
+- SqlModel
+- Pydantic
+- Passlib
+- Pandas
+- PyJWT
+- Pytest
+- Bcrypt
+- Cryptography
+- AioSqlite
+- Datafaker
+
+## Anchor Links
+[Auth Endpoints (Login)](controllers/logInController.py) \
+\
+[Auth Endpoints (Signup)](controllers/signUpController.py) \
+\
+[Crud Endpoints (Signup)](controllers/crudController.py) \
+\
+[Files Endpoints (Signup)](controllers/filesController.py)  
+\
+[View Endpoints (Signup)](controllers/viewController.py)  
+
 
 ## Project Structure
-
 ```
-
+|──src/
+    |──app/
+        |──middleware
+        main.py
+        middle.py
+        redis.py
+    |──controllers/
+         crudContoller.py
+         filesContoller.py
+         logInController.py
+         signUpController.py
+         viewController.py
+    |──core/
+        config.py
+    |──db/
+        schema.py
+    |──models
+        client.py
+        user.py
+    |──schemas
+        client.py
+        user.py
+    |──services
+        adminService.py
+        authService.py
+        crudService.py
+        filesService.py
+        jwtService.py
+        viewService.py
+    |──tests
+        |──unit
+            auth.py
+        |──integ
+            auth.py
+    |──utils
+        Repositories.py
+        authHelpers.py
+        crudHelpers.py
+        filesHelpers.py
+    |──validators
+        clients.py
+        users.py
+|──storage/
+    |──exports/
+    |──imports/
+    
 ```
-## Tech Stack
-
-
-##  
-
-
-### .env.example variables
-```
-...
-```
-
-
-##
-[Auth Endpoints]('controllers/authController.py')
