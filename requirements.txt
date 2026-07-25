@@ -6,7 +6,6 @@ pydantic
 passlib
 pandas
 pyjwt
-python-dotenv
 pytest
 bcrypt==4.0.1
 redis

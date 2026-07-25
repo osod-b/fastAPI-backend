@@ -1,5 +1,4 @@
-
-from fastapi import Depends, APIRouter, HTTPException, status, Request
+from fastapi import Depends, APIRouter, HTTPException, status, Request, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 from services.filesService import FilesService
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -18,12 +17,9 @@ async def get_client_repo(
 ) -> ClientRepository:
     return ClientRepository(db)
 
-
-#so far it just saves the data into a folder, later it modifies the 
-
 @files.get('files/import_file', status_code=status.HTTP_200_OK)
 async def file_import(
-    post: FileVal,
+    post: UploadFile,
     request: Request,
     service: FilesService = Depends(),
 ):

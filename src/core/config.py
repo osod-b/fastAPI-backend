@@ -14,17 +14,15 @@ class Settings(BaseSettings):
 
     DEBUG: bool = False
 
-    ALLOWED_ORIGINS: str = Field(alias="ALLOW_ORIGINS")
     DATABASE_URL: str = Field(alias="DB_URL")
-    CACHE_DB_URL: str = Field(alias="CACHE_DB_URL")
+    ALLOWED_ORIGINS: str = Field(alias="ALLOW_ORIGINS")
     JWT_SECRET_KEY: str = Field(alias="JWT_SECRET_KEY")
-    TOKEN_EXPIRES_MINUTES: int = Field(alias="TOKEN_EXPIRES_MINUTES")
-    TOKEN_EXPIRES_DAYS: int = Field(alias="TOKEN_EXPIRES_DAYS")
     HASHING_ALGORITHM: str = Field(alias="HASHING_ALGORITHM")
     SSH_KEY: str = Field(alias="SSH_KEY")
-    HMAC_MESSAGE: str = Field(alias="HMAC_MESSAGE")
+    HMAC_SECRET_MESSAGE: str = Field(alias="HMAC_SECRET_MESSAGE")
     FERNET_KEY: str = Field(alias="FERNET")
     STORAGE_PATH: str = Field(alias="STORAGE_PATH")
+    REDIS_PWD: str = Field(alias="REDIS_PWD")
 
     @classmethod
     @field_validator("ALLOWED_ORIGINS", mode='before')

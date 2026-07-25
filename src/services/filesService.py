@@ -1,3 +1,5 @@
+from fastapi import UploadFile
+
 import os
 
 from validators.clients import FileType, FileVal
@@ -18,10 +20,10 @@ class FilesService():
     
     async def file_import(
         self, 
-        post: FileVal,
+        post: UploadFile,
     ) -> dict:
         
-        file = post.value
+        file = post
 
         f_name = file.filename
         f_type = _normalize_file_type(f_name.rsplit('.')[-1])

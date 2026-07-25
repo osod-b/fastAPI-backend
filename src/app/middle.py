@@ -49,7 +49,7 @@ def add_sessionid_middleware(app):
                 value=session_id,
                 httponly=True,
                 samesite="lax",
-                secure=True,   # only reaches the client over HTTPS -- see note below
+                secure=True,
                 max_age=SESSION_TTL_SECONDS,
             )
         return response

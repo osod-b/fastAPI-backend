@@ -11,10 +11,10 @@ class TokenController:
     def __init__(self):
 
         assert type(setting.SSH_KEY) == str
-        assert type(setting.HMAC_MESSAGE) == str
+        assert type(setting.HMAC_SECRET_MESSAGE) == str
 
         self.secret = bytearray(setting.SSH_KEY, "utf-8")
-        self.message = bytearray(setting.HMAC_MESSAGE, "utf-8")
+        self.message = bytearray(setting.HMAC_SECRET_MESSAGE, "utf-8")
         
         self.signature = self.create_signature()
         self.last_time: Optional[str] = None

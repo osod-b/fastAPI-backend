@@ -1,5 +1,7 @@
 import redis
 
+from core.config import setting
+
 class RedisSession():
     __slots__ = ['redis_session', 'ttl']
 
@@ -36,14 +38,4 @@ class RedisSession():
         self.redis_session.delete(f'{name}={ip}[{operation}]')
         return
 
-    
-    # def get_item(self, name: str, ip: str, operation: str, inner_key):
-    #     self.redis_session.get
-    
-
-redis_session = RedisSession(password='123')
-
-#ttl for redis session
-#PASSWORDS
-#SECURITY
-#HARDER CONCEPTS
+redis_session = RedisSession(password=setting.REDIS_PWD)

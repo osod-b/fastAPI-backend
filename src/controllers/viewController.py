@@ -1,10 +1,31 @@
-# from fastapi import APIRouter
-# from app.main import app
-# from services.viewService import get_all_clients
+from fastapi import APIRouter
+
+from services.viewService import get_all_clients
 
 
+view = APIRouter()
 
-#app should have common decryptor
 
-#create logic for adding the completion date and count it for later showing
-# #decrypt messages each time I show them in GUI, do something with decryption key
+@view.get()
+def get_all():
+    ...
+
+@view.get()
+def get_all():
+    ...
+
+@view.get()
+def get_all():
+    ...
+
+@view.get()
+def get_all():
+    ...
+
+@view.get()
+def get_all():
+    ...
+
+@view.get()
+def get_all():
+    ...

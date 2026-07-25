@@ -8,3 +8,9 @@ storage/files
 storage/imports
 TODO.txt
 __pycache__
+logs
+.pytest_cache
+models/pdata.py
+__pycache__/
+*.pyc
+*.pyo
