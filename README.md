@@ -100,7 +100,7 @@ CMD ["/src/docker-run.sh"]
         |──integ
             auth.py
     |──utils
-        Repositories.py
+        repositories.py
         authHelpers.py
         crudHelpers.py
         filesHelpers.py

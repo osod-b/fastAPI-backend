@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse, RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from services.crudService import ClientService
-from utils.Repositories import ClientRepository
+from utils.repositories import ClientRepository
 from schemas.client import ClientSchema, EditInput
 from services.jwtService import _decode_jwt, _tokens_presence
 from db.schema import get_db
@@ -21,10 +21,13 @@ async def get_client_repo(
 @crud.post('/crud/add_client', status_code=status.HTTP_200_OK)
 async def add(
     post: ClientSchema,
+    request: Request,
     service: ClientService = Depends(),
     repository: ClientRepository = Depends(get_client_repo),
-):
-    result = await service.add(post, repository)
+):  
+    session_id = request.state.session_id
+    
+    result = await service.add(post, session_id, repository)
     response = JSONResponse(content=result)
 
     return response

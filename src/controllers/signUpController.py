@@ -6,9 +6,9 @@ from fastapi.security.http import HTTPAuthorizationCredentials, HTTPBearer
 
 from validators.users import VerificationalCode, EmailValidator, PasswordValidator
 from schemas.user import UserRegistration
-from utils.Repositories import UserRepository
+from utils.repositories import UserRepository
 from services.authService import UserSignupService
-from utils.authHelpers import  _get_ip_address
+from utils.authHelpers import  _get_session_id
 from services.jwtService import _tokens_presence
 from db.schema import get_db
 
@@ -35,8 +35,8 @@ async def register_user(
             detail='Log out first'
         )               
 
-    uip = _get_ip_address(request)                                  #weird ip take
-    result = await service.signup(post, uip, repository)
+    session_id = _get_session_id(request)                           
+    result = await service.signup(post, session_id, repository)
 
     response = JSONResponse(content=result)
     response.delete_cookie('access_token')
@@ -59,9 +59,9 @@ async def register_mfa(
             detail='Log out first'
         )     
     
-    uip = _get_ip_address(request)
+    session_id = _get_session_id(request)
 
-    result = await service.mfa(post, uip, repository)
+    result = await service.mfa(post, session_id, repository)
 
     a_token, r_token = result
 
@@ -93,8 +93,8 @@ async def forgot_password(
             detail='Log out first'
         )
     
-    uip = _get_ip_address(request)
-    result = await service.forgot_pwd(post, uip, repository)
+    session_id = _get_session_id(request)
+    result = await service.forgot_pwd(post, session_id, repository)
 
     response = JSONResponse(content=result,
                             status_code=202
@@ -119,8 +119,8 @@ async def verify_code_pwd(
             detail='Log out first'
         )
 
-    uip = _get_ip_address(request)
-    result = await service.vrf_code(post, uip, repository)
+    session_id = _get_session_id(request)
+    result = await service.vrf_code(post, session_id, repository)
 
     response = JSONResponse(content=result)
     response.delete_cookie('access_token')
@@ -143,8 +143,8 @@ async def reset_password(
             detail='Log out first'
         )
 
-    uip = _get_ip_address(request)
-    result = await service.reset_pwd(post, uip, repository)
+    session_id = _get_session_id(request)
+    result = await service.reset_pwd(post, session_id, repository)
 
     response = JSONResponse(content=result)
     response.delete_cookie('access_token')

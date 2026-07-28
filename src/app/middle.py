@@ -5,7 +5,7 @@ from core.config import setting
 
 from app.middleware.rate_limiter import RateLimiterStore
 from app.middleware.hmac_token import TokenController
-from app.middleware.session import SessionStorage, SessionToken
+from app.middleware.session import SessionToken
 
 import time
 
@@ -22,22 +22,19 @@ limiter = RateLimiterStore(max_tokens=10, refill_rate=2, interval=1.0)
 
 controller = TokenController()
 
-session_store = SessionStorage()
-
-SESSION_COOKIE_NAME = "session_id"
 SESSION_TTL_SECONDS = 1800 
 
+#poorly thought out logic
 
 def add_sessionid_middleware(app):
     @app.middleware("http")
     async def session_middleware(request: Request, call_next):
-        session_id = request.cookies.get(SESSION_COOKIE_NAME)
+        session_id = request.cookies.get("session_id")
         is_new_session = False
  
-        if session_id and session_store.touch(session_id, SESSION_TTL_SECONDS):
-            pass
-        else:
-            session_id = session_store.generate(ttl_seconds=SESSION_TTL_SECONDS)
+        if not session_id:
+            token = SessionToken.new()
+            session_id = token.token_id
             is_new_session = True
  
         request.state.session_id = session_id
@@ -45,7 +42,7 @@ def add_sessionid_middleware(app):
  
         if is_new_session:
             response.set_cookie(
-                key=SESSION_COOKIE_NAME,
+                key="session_id",
                 value=session_id,
                 httponly=True,
                 samesite="lax",
@@ -55,7 +52,7 @@ def add_sessionid_middleware(app):
         return response
 
 
-def add_signature_middlware(app):
+def add_signature_middleware(app):
     @app.middleware("http")
     async def signature_middleware(request: Request, call_next):
 

@@ -33,10 +33,8 @@ def _crt_access_code() -> str:
 def _crt_uuid4() -> UUID:
     return uuid4()
 
-
-def _get_ip_address(request: Request) -> str:
-    return request.headers['x-user-ip']
-
+def _get_session_id(request: Request) -> str:
+    return request.state.session_id
 
 # def _encrypt_data(password: str) -> str:
 #     ...

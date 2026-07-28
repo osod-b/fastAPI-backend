@@ -3,10 +3,10 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from validators.users import VerificationalCode
-from utils.Repositories import UserRepository
+from utils.repositories import UserRepository
 from services.authService import UserLoginService
 from schemas.user import UserLogin
-from utils.authHelpers import  _get_ip_address
+from utils.authHelpers import  _get_session_id
 from services.jwtService import _tokens_presence
 from db.schema import get_db
 
@@ -31,8 +31,8 @@ async def login_user(
             detail='Already Logged In'
         )
         
-    uip = _get_ip_address(request)
-    result = await service.login(post, uip, repository)
+    session_id = _get_session_id(request)
+    result = await service.login(post, session_id, repository)
 
     if isinstance(result, dict):
         response = JSONResponse(content=result)
@@ -71,8 +71,8 @@ async def mfa_user(
             detail='Already Logged In'
         )
     
-    uip = _get_ip_address(request)
-    result = await service.mfa(post, uip, repository)
+    session_id = _get_session_id(request)
+    result = await service.mfa(post, session_id, repository)
 
     a_token, r_token = result
 
@@ -108,7 +108,7 @@ async def logout_user(
 
     return response                                                             #deleted jwt cookies isn't providing complete log out
 
-@login.post('/auth/refresh', status_code=status.HTTP_200_OK)                     #when is this function forced
+@login.post('/auth/refresh', status_code=status.HTTP_200_OK)                     #when does this function get invoked
 async def refresh_session(
     request: Request,
     service: UserLoginService = Depends()

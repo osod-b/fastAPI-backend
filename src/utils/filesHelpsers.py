@@ -32,7 +32,7 @@ def _fol_exist(path: str) -> bool:
     return os.path.exists(path)
 
 def _make_dirs(path: str) -> bool:
-    return os.makedirs(path)
+    return os.makedirs(path, exist_ok=True)
 
 def _normalize_file_type(f_type: str) -> str:
     if f_type in {'xlsx', 'xls'}:

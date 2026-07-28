@@ -1,31 +1,31 @@
-from fastapi import APIRouter
+# from fastapi import APIRouter
 
-from services.viewService import get_all_clients
-
-
-view = APIRouter()
+# from services.viewService import get_all_clients
 
 
-@view.get()
-def get_all():
-    ...
+# view = APIRouter()
 
-@view.get()
-def get_all():
-    ...
 
-@view.get()
-def get_all():
-    ...
+# @view.get()
+# def get_all():
+#     ...
 
-@view.get()
-def get_all():
-    ...
+# @view.get()
+# def get_all():
+#     ...
 
-@view.get()
-def get_all():
-    ...
+# @view.get()
+# def get_all():
+#     ...
 
-@view.get()
-def get_all():
-    ...
+# @view.get()
+# def get_all():
+#     ...
+
+# @view.get()
+# def get_all():
+#     ...
+
+# @view.get()
+# def get_all():
+#     ...

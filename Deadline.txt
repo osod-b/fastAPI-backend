@@ -1,0 +1,11 @@
+Write proper documentation (with analysis)
+Deploy backend on render, while frontend on gitpages
+Add working tests for backend and make them run on GitHub Actions
+Defenitely imlplement sessionids
+
+Write documentation for frontend formalizing as Taxaition App
+Make front-end with more/less normal architecture
+Make a logo for the frontend app
+
+
+Complete TODO

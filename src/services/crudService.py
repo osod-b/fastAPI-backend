@@ -3,7 +3,7 @@ from cryptography.fernet import Fernet
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from schemas.client import ClientSchema, EditInput
-from utils.Repositories import ClientRepository
+from utils.repositories import ClientRepository
 from app.redis import redis_session
 from core.config import setting
 # from logger import Logger
@@ -18,11 +18,14 @@ class ClientService():
     async def add(
             self,
             post: ClientSchema,
+            sessid: str,
             rep: ClientRepository,
 
     ) -> dict:
         as_dict = post.model_dump(mode="json")
         as_dict_unw = unwrap(as_dict)
+
+        print(sessid)
 
         encrypted_msg = cipher.encrypt(post.message.value.encode('utf-8')).decode('utf-8')
         as_dict_unw["message"] = encrypted_msg
@@ -34,18 +37,16 @@ class ClientService():
         pnum = item.phone_number
         email = item.email
 
-        cache = redis_session.get_whole_hash('client', 'session', 'ratelimiter')
+        cache = redis_session.get_whole_hash('client', sessid, 'ratelimiter')
         if (
             cache and 
             cache['phone_number'] == pnum and
             cache['email'] == email
         ):
-            raise HTTPException(status_code=409, detail="Same request sent too often")
-            
-        #instead of ip is better to use sessionid
+            raise HTTPException(status_code=409, detail=f"Same request sent too often")
 
         redis_session.hset_exp('client', 
-                               'session', 
+                                sessid, 
                                'ratelimiter',
                                 mapping={
                                     'uuid': uuid,

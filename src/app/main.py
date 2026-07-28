@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from app.middle import (
     add_middleware,
     add_ratelimiter_middleware, 
-    add_signature_middlware,
+    add_signature_middleware,
     add_sessionid_middleware, 
     )
 
@@ -30,8 +30,8 @@ app = FastAPI(title='Backend Application',
 
 add_middleware(app)
 add_ratelimiter_middleware(app)
-add_signature_middlware(app)
-add_signature_middlware(app)
+add_signature_middleware(app)
+add_sessionid_middleware(app)
 
 app.include_router(login)
 app.include_router(sign)

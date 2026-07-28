@@ -3,7 +3,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from services.filesService import FilesService
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from utils.Repositories import ClientRepository
+from utils.repositories import ClientRepository
 from validators.clients import FileVal, FileType
 from services.jwtService import _tokens_presence
 from utils.crudHelpers import _get_role

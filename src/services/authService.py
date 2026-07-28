@@ -7,7 +7,7 @@ from passlib.context import CryptContext
 from cryptography.fernet import Fernet
 
 from validators.users import VerificationalCode, PasswordValidator, EmailValidator
-from utils.Repositories import UserRepository
+from utils.repositories import UserRepository
 from app.redis import redis_session
 from core.config import setting
 from services.jwtService import (
@@ -26,8 +26,6 @@ from utils.authHelpers import (
     _vrf_rk,
 )
 
-# CLEANER CODE
-# style helpers in the same consistent way
 
 key = setting.FERNET_KEY
 cipher = Fernet(key)
@@ -39,7 +37,7 @@ class UserSignupService:
     async def signup(   
             self,
             post: UserRegistration,
-            uip: str,
+            session: str,
             rep: UserRepository,
         ) -> dict:
         
@@ -54,7 +52,7 @@ class UserSignupService:
 
         redis_session.hset_exp(
             'user', 
-            uip, 
+            session, 
             'register',
             mapping={
                     'access_code': code, 
@@ -73,31 +71,31 @@ class UserSignupService:
     async def mfa(
             self,
             post: VerificationalCode,
-            uip: str,
+            session: str,
             rep: UserRepository,
         ) -> tuple:
 
         code = post.value
 
-        if not _vrf_rk(uip, 'register'):
+        if not _vrf_rk(session, 'register'):
             raise HTTPException(
                         status_code=status.HTTP_404_NOT_FOUND,
                         detail='Verify redis Key')
     
-        if not _vrf_pk(uip, 'register', 1):
+        if not _vrf_pk(session, 'register', 1):
             raise HTTPException(
                         status_code=status.HTTP_409_CONFLICT,
                         detail='Verify progress Key')
     
-        if not _vrf_acc(uip, 'register', code):
+        if not _vrf_acc(session, 'register', code):
             raise HTTPException(
                         status_code=status.HTTP_400_BAD_REQUEST,
                         detail='Verify access Code')
         
-        username = redis_session.hget('user', uip, 'register', 'username')
-        email = redis_session.hget('user', uip, 'register', 'email')
+        username = redis_session.hget('user', session, 'register', 'username')
+        email = redis_session.hget('user', session, 'register', 'email')
 
-        encrypted_pwd = redis_session.hget('user', uip, 'register', 'password')
+        encrypted_pwd = redis_session.hget('user', session, 'register', 'password')
         
         decrypted_pwd = cipher.decrypt(encrypted_pwd).decode('utf-8')
 
@@ -117,14 +115,14 @@ class UserSignupService:
         r_token = _create_jwt(r_payload,
                               timedelta(hours=12), refresh=True)
         
-        redis_session.hdel('user', uip, 'register')
+        redis_session.hdel('user', session, 'register')
 
         return (a_token, r_token)
     
     async def forgot_pwd(
             self,
             post: EmailValidator,
-            uip: str, 
+            session: str, 
             rep: UserRepository,
         ) -> dict:
 
@@ -139,7 +137,7 @@ class UserSignupService:
 
         redis_session.hset_exp(
             'user',
-            uip,
+            session,
             'forgot_pwd',
             mapping={
                     'access_code': code,
@@ -157,29 +155,29 @@ class UserSignupService:
     async def vrf_code(
             self,
             post: VerificationalCode,
-            uip: str,
+            session: str,
             rep: UserRepository,
         ) -> dict:
 
         code = post.value
 
-        if not _vrf_rk(uip, 'forgot_pwd'):
+        if not _vrf_rk(session, 'forgot_pwd'):
             raise HTTPException(
                         status_code=status.HTTP_404_NOT_FOUND,
                         detail='Verify redis Key')
     
-        if not _vrf_pk(uip, 'forgot_pwd', 2):
+        if not _vrf_pk(session, 'forgot_pwd', 2):
             raise HTTPException(
                         status_code=status.HTTP_409_CONFLICT,
                         detail='Verify progress Key')
     
-        if not _vrf_acc(uip, 'forgot_pwd', code):
+        if not _vrf_acc(session, 'forgot_pwd', code):
             raise HTTPException(
                         status_code=status.HTTP_400_BAD_REQUEST,
                         detail='Verify access Code')
 
         
-        redis_session.set_hval('user', uip, 'forgot_pwd', 'progress_key', 3)
+        redis_session.set_hval('user', session, 'forgot_pwd', 'progress_key', 3)
 
         return {"message": "Code was verified. Process to password change",
                 "code (test)": code,
@@ -188,24 +186,24 @@ class UserSignupService:
     async def reset_pwd(
             self,
             post: PasswordValidator,
-            uip: str,
+            session: str,
             rep: UserRepository
         ) -> set:
 
-        if not _vrf_rk(uip, 'forgot_pwd'):
+        if not _vrf_rk(session, 'forgot_pwd'):
             raise HTTPException(
                         status_code=status.HTTP_404_NOT_FOUND,
                         detail='Verify redis Key')
     
-        if not _vrf_pk(uip, 'forgot_pwd', 3):
+        if not _vrf_pk(session, 'forgot_pwd', 3):
             raise HTTPException(
                         status_code=status.HTTP_409_CONFLICT,
                         detail='Verify progress Key')                           #what if someone trued to change redis values?
 
         password = post.value
 
-        email = redis_session.hget('user', uip, 'forgot_pwd', 'email')
-        active = redis_session.hget('user', uip, 'forgot_pwd', 'active')
+        email = redis_session.hget('user', session, 'forgot_pwd', 'email')
+        active = redis_session.hget('user', session, 'forgot_pwd', 'active')
 
         hashed_pwd = _hash_pwd(pwd_context, password)
 
@@ -214,7 +212,7 @@ class UserSignupService:
         else:
             await rep.update_by_attrs(email, password=hashed_pwd)
         
-        redis_session.hdel('user', uip, 'forgot_pwd')
+        redis_session.hdel('user', session, 'forgot_pwd')
         
         return {"message":"Password was successfully changed"}
 
@@ -222,7 +220,7 @@ class UserLoginService:
     async def login(
             self,
             post: UserLogin,
-            uip: str,
+            session: str,
             rep: UserRepository,
         ) -> dict | tuple:
 
@@ -257,7 +255,7 @@ class UserLoginService:
             code = _crt_access_code()
             redis_session.hset_exp(
                 'user',
-                uip, 
+                session, 
                 'login',
                 mapping={
                         'access_code': code,
@@ -284,28 +282,28 @@ class UserLoginService:
     async def mfa(
             self,
             post: VerificationalCode,
-            uip: str,
+            session: str,
             rep: UserRepository,
         ) -> tuple:
 
         code = post.value
 
-        if not _vrf_rk(uip, 'login'):
+        if not _vrf_rk(session, 'login'):
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail='Verify redis Key')
     
-        if not _vrf_pk(uip, 'login', 2):
+        if not _vrf_pk(session, 'login', 2):
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail='Verify progress Key')                                               
         
-        if not _vrf_acc(uip, 'login', code):
+        if not _vrf_acc(session, 'login', code):
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail='Verify access Code')
 
-        uuid = redis_session.hget('user', uip, 'login', 'uuid')
+        uuid = redis_session.hget('user', session, 'login', 'uuid')
 
         await rep.update_by_attrs(uuid, active=True)
 
@@ -329,7 +327,7 @@ class UserLoginService:
                               timedelta(hours=12), refresh=True
                 ) 
 
-        redis_session.hdel('user', uip, 'login')
+        redis_session.hdel('user', session, 'login')
 
         return (a_token, r_token)
 
