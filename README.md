@@ -39,8 +39,8 @@ CMD ["/src/docker-run.sh"]
 ## Requirements.txt
 - FastAPI
 - Uvicorn
-- SqlALchemy
-- SqlModel
+- SQLALchemy
+- SQLModel
 - Pydantic
 - Passlib
 - Pandas
@@ -52,16 +52,15 @@ CMD ["/src/docker-run.sh"]
 - Datafaker
 
 ## Anchor Links
-[Auth Endpoints (Login)](controllers/logInController.py) \
+[Auth Endpoints (LogIn)](controllers/logInController.py) \
 \
-[Auth Endpoints (Signup)](controllers/signUpController.py) \
+[Auth Endpoints (SignUp)](controllers/signUpController.py) \
 \
-[Crud Endpoints (Signup)](controllers/crudController.py) \
+[Crud Endpoints](controllers/crudController.py) \
 \
-[Files Endpoints (Signup)](controllers/filesController.py)  
+[Files Endpoints](controllers/filesController.py)  
 \
-[View Endpoints (Signup)](controllers/viewController.py)  
-
+[View Endpoints](controllers/viewController.py)  
 
 ## Project Structure
 ```
@@ -71,9 +70,10 @@ CMD ["/src/docker-run.sh"]
         main.py
         middle.py
         redis.py
+        logger.py
     |──controllers/
-         crudContoller.py
-         filesContoller.py
+         crudController.py
+         filesController.py
          logInController.py
          signUpController.py
          viewController.py
@@ -110,5 +110,4 @@ CMD ["/src/docker-run.sh"]
 |──storage/
     |──exports/
     |──imports/
-    
 ```
