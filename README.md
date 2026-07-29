@@ -52,15 +52,16 @@ CMD ["/src/docker-run.sh"]
 - Datafaker
 
 ## Anchor Links
-[Auth Endpoints (LogIn)](controllers/logInController.py) \
+[Auth Endpoints (LogIn)](src/controllers/logInController.py) \
 \
-[Auth Endpoints (SignUp)](controllers/signUpController.py) \
+[Auth Endpoints (SignUp)](src/controllers/signUpController.py) \
 \
-[Crud Endpoints](controllers/crudController.py) \
+[Crud Endpoints](src/controllers/crudController.py) \
 \
-[Files Endpoints](controllers/filesController.py)  
-\
-[View Endpoints](controllers/viewController.py)  
+[Files Endpoints](src/controllers/filesController.py)  
+
+<!-- [View Endpoints](src/controllers/viewController.py)   -->
+
 
 ## Project Structure
 ```
