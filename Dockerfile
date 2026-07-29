@@ -8,7 +8,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY ./src ./src
 COPY ./storage ./storage
-COPY .env ./
+COPY .env.example ./
 
 COPY src/docker-run.sh /src/docker-run.sh
 RUN chmod +x /src/docker-run.sh
