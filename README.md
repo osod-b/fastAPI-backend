@@ -11,9 +11,9 @@ http://localhost:8000/docs
 ```
 
 ## Endpoint navigation
-[Auth Endpoints (LogIn)](src/controllers/logInController.py) \
+[Auth Endpoint (LogIn)](src/controllers/logInController.py) \
 \
-[Auth Endpoints (SignUp)](src/controllers/signUpController.py) \
+[Auth Endpoint (SignUp)](src/controllers/signUpController.py) \
 \
 [Crud Endpoints](src/controllers/crudController.py) \
 \
