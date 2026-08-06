@@ -10,7 +10,7 @@ API Docs:
 http://localhost:8000/docs
 ```
 
-## Navigation
+## Endpoint navigation
 [Auth Endpoints (LogIn)](src/controllers/logInController.py) \
 \
 [Auth Endpoints (SignUp)](src/controllers/signUpController.py) \
