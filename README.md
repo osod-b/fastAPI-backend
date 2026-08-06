@@ -6,7 +6,7 @@ An API written on FastAPI framework (Python lang.) with implemented self-made au
 bash build.sh
 bash run.sh
 
-Docs: http://localhost:8000/docs
+API Docs: http://localhost:8000/docs
 ```
 
 ## Navigation
