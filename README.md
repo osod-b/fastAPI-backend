@@ -1,5 +1,5 @@
-# -fastAPI-backend
-Backend API with JWT tokens, MFA, CRUD, layer separation.
+# API
+An API written on FastAPI framework (Python lang.) with implemented self-made authentication
 
 ## Local deployment
 ```
