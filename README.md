@@ -21,7 +21,7 @@ http://localhost:8000/docs
 [Service](src/services/crudService.py) \
 \
 [Files Endpoints](src/controllers/filesController.py) \
-[Service](src/services/authService.py) \
+[Service](src/services/authService.py) 
 
 <!-- [View Endpoints](src/controllers/viewController.py)   -->
 
