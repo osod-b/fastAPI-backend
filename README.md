@@ -20,6 +20,12 @@ Docs: http://localhost:8000/docs
 
 <!-- [View Endpoints](src/controllers/viewController.py)   -->
 
+## Features
+
+- SOLID
+- 
+-
+
 
 ## Docker Image Configuration
 ```
