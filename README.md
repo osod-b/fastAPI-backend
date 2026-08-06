@@ -1,10 +1,10 @@
 # Description
 An API written on FastAPI framework (Python lang.) with implemented self-made authentication
 
-## Local deployment
+## Local running
 ```
-docker build -t app .
-docker run -p 8000:8000 app
+bash build.sh
+bash run.sh
 
 Docs: http://localhost:8000/docs
 ```
