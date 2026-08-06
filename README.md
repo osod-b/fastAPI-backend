@@ -1,4 +1,4 @@
-# API
+# Description
 An API written on FastAPI framework (Python lang.) with implemented self-made authentication
 
 ## Local deployment
