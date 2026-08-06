@@ -12,16 +12,16 @@ http://localhost:8000/docs
 
 ## Endpoint navigation
 [Auth Endpoint (LogIn)](src/controllers/logInController.py) \
-[Auth Services FIle](src/services/authService) \
+[Service](src/services/authService.py) \
 \
 [Auth Endpoint (SignUp)](src/controllers/signUpController.py) \
-[Auth Services FIle](src/services/authService) \
+[Service](src/services/authService.py) \
 \
 [CRUD Endpoints](src/controllers/crudController.py) \
-[CRUD Services FIle](src/services/crudService) \
+[Service](src/services/crudService.py) \
 \
 [Files Endpoints](src/controllers/filesController.py) \
-[Files Services FIle](src/services/authService) \
+[Service](src/services/authService.py) \
 
 <!-- [View Endpoints](src/controllers/viewController.py)   -->
 
