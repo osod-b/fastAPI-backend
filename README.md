@@ -54,7 +54,7 @@ CMD ["/src/docker-run.sh"]
 ```
 
 ## Prerequisites
-- Python
+- Python 3.14.6
 - Docker
 - Redis
 - Git
