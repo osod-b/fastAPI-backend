@@ -9,6 +9,18 @@ docker run -p 8000:8000 app
 Docs: http://localhost:8000/docs
 ```
 
+## Navigation
+[Auth Endpoints (LogIn)](src/controllers/logInController.py) \
+\
+[Auth Endpoints (SignUp)](src/controllers/signUpController.py) \
+\
+[Crud Endpoints](src/controllers/crudController.py) \
+\
+[Files Endpoints](src/controllers/filesController.py)  
+
+<!-- [View Endpoints](src/controllers/viewController.py)   -->
+
+
 ## Docker Image Configuration
 ```
 FROM python:3.12-slim
@@ -51,16 +63,6 @@ CMD ["/src/docker-run.sh"]
 - AioSqlite
 - Datafaker
 
-## Anchor Links
-[Auth Endpoints (LogIn)](src/controllers/logInController.py) \
-\
-[Auth Endpoints (SignUp)](src/controllers/signUpController.py) \
-\
-[Crud Endpoints](src/controllers/crudController.py) \
-\
-[Files Endpoints](src/controllers/filesController.py)  
-
-<!-- [View Endpoints](src/controllers/viewController.py)   -->
 
 
 ## Project Structure
