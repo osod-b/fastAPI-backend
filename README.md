@@ -1,5 +1,5 @@
 # Description
-An API written on FastAPI framework (Python lang.) with implemented self-made authentication
+An API written on FastAPI framework (Python) with implemented self-made authentication
 
 ## Local running
 ```
